@@ -1,1 +1,155 @@
 _svd: ../svd/stm32c542.svd
+
+_modify:
+  GPIO[ABC]:
+    description: General-purpose I/Os
+  
+GPIO[ABC]:
+  _strip: #register names
+    - "GPIO_"
+  MODER:
+    _array:
+      MODE*:
+        description: Port x configuration pin %s
+    MODE*:
+      _replace_enum:
+        _name: Mode
+        Input: [0, Input mode]
+        Output: [1, General purpose output mode]
+        Alternate: [2, Alternate function mode]
+        Analog: [3, Analog mode (reset state)]
+  OTYPER:
+    _array:
+      OT*:
+        description: Port x configuration pin %s
+    OT*:
+      _replace_enum:
+        _name: OutputType
+        PushPull: [0, Output push-pull (reset state)]
+        OpenDrain: [1, Output open-drain]
+  OSPEEDR:
+    _array:
+      OSPEED*:
+        description: Port x configuration pin %s
+    OSPEED*:
+      _replace_enum:
+        _name: OutputSpeed
+        LowSpeed: [0, Low speed]
+        MediumSpeed: [1, Medium speed]
+        HighSpeed: [2, High speed]
+        VeryHighSpeed: [3, Very-high speed]
+  PUPDR:
+    _array:
+      PUPD*:
+        description: Port x configuration pin %s
+    PUPD*:
+      _replace_enum:
+        _name: Pull
+        Floating: [0, No pull-up, pull-down]
+        PullUp: [1, Pull-up]
+        PullDown: [2, Pull-down]
+  IDR:
+    _array:
+      ID*:
+        description: Port x input data pin %s
+    ID*:
+      _name: InputData
+      High: [1, Input is logic high]
+      Low: [0, Input is logic low]
+  ODR:
+    _array:
+      OD*:
+        description: Port x output data pin %s
+    OD*:
+      _name: OutputData
+      High: [1, Set output to logic high]
+      Low: [0, Set output to logic low]
+  BSRR:
+    _array:
+      BR*:
+        description: Port x reset pin %s
+      BS*:
+        description: Port x set pin %s
+    BR*:
+      _replace_enum:
+        _name: BitReset
+        Reset: [1, Resets the corresponding ODRx bit]
+    BS*:
+      _replace_enum:
+        _name: BitSet
+        Set: [1, Sets the corresponding ODRx bit]
+  LCKR:
+    _array:
+      "LCK[0-9],LCK1[0-5]": # bits LCK0-LCK15
+        description: Port x lock pin %s
+    "LCK[0-9],LCK1[0-5]":
+      _replace_enum:
+        _name: Lock
+        Unlocked: [0, Port configuration not locked]
+        Locked: [1, Port configuration locked]
+    LCKK:
+      _replace_enum:
+        _name: LockKey
+        NotActive: [0, Port configuration lock key not active]
+        Active: [1, Port configuration lock key active]
+  AFR[LH]:
+    _array:
+      "AFSEL*": {}
+    "AFSEL*":
+      _replace_enum:
+        _name: AlternateFunction
+        AF0: [0, AF0]
+        AF1: [1, AF1]
+        AF2: [2, AF2]
+        AF3: [3, AF3]
+        AF4: [4, AF4]
+        AF5: [5, AF5]
+        AF6: [6, AF6]
+        AF7: [7, AF7]
+        AF8: [8, AF8]
+        AF9: [9, AF9]
+        AF10: [10, AF10]
+        AF11: [11, AF11]
+        AF12: [12, AF12]
+        AF13: [13, AF13]
+        AF14: [14, AF14]
+        AF15: [15, AF15]
+  BRR:
+    _array:
+      BR*:
+        description: Port x reset pin %s
+    BR*:
+      _replace_enum:
+        _name: BitReset
+        Reset: [1, Resets the corresponding ODx bit]
+GPIO[A]:  
+  AFRH:
+    _derive:
+      AFSEL%s: AFRL.AFSEL%s
+GPIO[BC]:
+  _derive: # the registers are the same for GPIO[A-H]
+    OTYPER: GPIOA.OTYPER
+    IDR: GPIOA.IDR
+    ODR: GPIOA.ODR
+    BSRR: GPIOA.BSRR
+    LCKR: GPIOA.LCKR
+    AFRL: GPIOA.AFRL
+    AFRH: GPIOA.AFRH
+    BRR: GPIOA.BRR
+  MODER: # the registers got different reset values for GPIO[A,B,C-H]
+    _derive:
+      MODE%s: GPIOA.MODER.MODE%s
+  OSPEEDR:
+    _derive:
+      OSPEED%s: GPIOA.OSPEEDR.OSPEED%s
+  PUPDR:
+    _derive:
+      PUPD%s: GPIOA.PUPDR.PUPD%s
+_add:
+  GPIOF:
+    derivedFrom: GPIOC
+    baseAddress: 0x42021400
+  GPIOG:
+    derivedFrom: GPIOC
+    baseAddress: 0x42021800
+
