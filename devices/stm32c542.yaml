@@ -3,7 +3,17 @@ _svd: ../svd/stm32c542.svd
 _modify:
   GPIO[ABC]:
     description: General-purpose I/Os
-  
+  RCC:
+    description: Reset and clock control
+
+# _add:
+  # GPIOF: # only 59x/5A3
+  #   derivedFrom: GPIOC
+  #   baseAddress: 0x42021400
+  # GPIOG: # only 59x/5A3
+  #   derivedFrom: GPIOC
+  #   baseAddress: 0x42021800
+
 GPIO[ABC]:
   _strip: #register names
     - "GPIO_"
@@ -145,11 +155,4 @@ GPIO[BC]:
   PUPDR:
     _derive:
       PUPD%s: GPIOA.PUPDR.PUPD%s
-_add:
-  GPIOF:
-    derivedFrom: GPIOC
-    baseAddress: 0x42021400
-  GPIOG:
-    derivedFrom: GPIOC
-    baseAddress: 0x42021800
 
