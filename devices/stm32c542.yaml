@@ -156,3 +156,455 @@ GPIO[BC]:
     _derive:
       PUPD%s: GPIOA.PUPDR.PUPD%s
 
+RCC:
+  _strip: #register names
+    - "RCC_"
+  CR1:
+    HSISON,HSIDIV3ON,HSIKON,HSIKERON,PSISON,PSIDIV3ON,PSIKON,PSIKERON,HSEON:
+      _replace_enum:
+        Off: [0, Clock Off]
+        On: [1, Clock On]
+    HSISRDY,HSIDIV3RDY,HSIKRDY,PSISRDY,PSIDIV3RDY,PSIKRDY,HSERDY:
+      _replace_enum:
+        NotReady: [0, Clock not ready]
+        Ready: [1, Clock ready]
+    HSEBYP:
+      _replace_enum:
+        NotBypassed: [0, Crystal oscillator not bypassed]
+        Bypassed: [1, Crystal oscillator bypassed with external clock]
+    HSECSSON:
+      _replace_enum:
+        Off: [0, CSS on HSE off (clock detector OFF)]
+        On: [1, "CSS on HSE on (clock detector ON if the HSE oscillator is stable, OFF if not)"]
+    HSEEXT:
+      _replace_enum:
+        Analog: [0, Oscillator bypassed in analog mode]
+        Digital: [1, Oscillator bypassed in digital mode]
+  CR2:
+    HSIKDIV,PSIKDIV:
+      _replace_enum:
+        Div1: [-1, Clock divided by 1]
+        Div1_5: [2, Clock divided by 1.5]
+        Div2: [3, Clock divided by 2]
+        Div2_5: [4, Clock divided by 2.5]
+        Div3: [5, Clock divided by 3]
+        Div3_5: [6, Clock divided by 3.5]
+        Div4: [7, Clock divided by 4]
+        Div4_5: [8, Clock divided by 4.5]
+        Div5: [9, Clock divided by 5]
+        Div5_5: [10, Clock divided by 5.5]
+        Div6: [11, Clock divided by 6]
+        Div6_5: [12, Clock divided by 6.5]
+        Div7: [13, Clock divided by 7]
+        Div7_5: [14, Clock divided by 7.5]
+        Div8: [15, Clock divided by 8]
+    PSIREFSRC:
+      _replace_enum:
+        Hse: [0, HSE clock used as reference for PSI]
+        Lse: [1, LSE clock used as reference for PSI]
+        HsiDiv18: [2, HSI clock divided by 18 used as reference for PSI]
+    PSIREF:
+      _replace_enum:
+        F32_768kHz: [0, "32.768 kHz"]
+        F8_MHz: [1, "8 MHz"]
+        F16_MHz: [2, "16 MHz"]
+        F24_MHz: [3, "24 MHz"]
+        F25_MHz: [4, "25 MHz"]
+        F32_MHz: [5, "32 MHz"]
+        F48_MHz: [6, "48 MHz"]
+        F50_MHz: [7, "50 MHz"]
+    PSIFREQ:
+      _replace_enum:
+        F100MHz: [0, "100 MHz"]
+        F144MHz: [1, "144 MHz"]
+        F160MHz: [-1, "160 MHz"]
+  CFGR1:
+    _clear: 
+      - RTCPRE
+      - MCO1PRE
+      - MCO2PRE
+    SW:
+      _replace_enum:
+        HsiDiv3: [0, HSIDIV3 selected as system clock]
+        Hsis: [1, HSIS selected as system clock]
+        Hse: [2, HSE selected as system clock]
+        Psis: [3, PSIS selected as system clock]
+    SWS:
+      _replace_enum:
+        HsiDiv3: [0, HSIDIV3 used as system clock]
+        Hsis: [1, HSIS used as system clock]
+        Hse: [2, HSE used as system clock]
+        Psis: [3, PSIS used as system clock]
+    STOPWUCK:
+      _replace_enum:
+        HsiDiv3: [0, HSIDIV3 selected as wake-up clock from system Stop mode]
+        Hsis: [1, HSIS selected as wake-up clock from system Stop mode]
+    RTCPRE: [0, 511]
+    MCO1PRE,MCO2PRE: [0, 15]
+    MCO1SEL:
+      _replace_enum:
+        Sys: [0, System clock selected (sys_ck)]
+        Hse: [1, HSE clock selected (hse_ck)]
+        Lse: [2, LSE clock selected (lse_ck)]
+        Lsi: [3, LSI clock selected (lsi_ck)]
+        PsiK: [4, PSIK clock selected (psik_ck)]
+        HsiK: [5, HSIK clock selected (hsik_ck)]
+        Psis: [6, PSIS clock selected (psis_ck)]
+        Hsis: [7, HSIS clock selected (hsis_ck)]
+    MCO2SEL:
+      _replace_enum:
+        Sys: [0, System clock selected (sys_ck)]
+        Hse: [1, HSE clock selected (hse_ck)]
+        Lse: [2, LSE clock selected (lse_ck)]
+        Lsi: [3, LSI clock selected (lsi_ck)]
+        PsiK: [4, PSIK clock selected (psik_ck)]
+        HsiK: [5, HSIK clock selected (hsik_ck)]
+        PsiDiv3: [6, PSIDIV3 clock selected (psidiv3_ck)]
+        HsiDiv3: [7, HSIDIV3 clock selected (hsidiv3_ck)]
+  CFGR2:
+    HPRE:
+      _replace_enum:
+        Div1: [-1, rcc_hclk = sys_ck]
+        Div2: [8, rcc_hclk = sys_ck / 2]
+        Div4: [9, rcc_hclk = sys_ck / 4]
+        Div8: [10, rcc_hclk = sys_ck / 8]
+        Div16: [11, rcc_hclk = sys_ck / 16]
+        Div64: [12, rcc_hclk = sys_ck / 64]
+        Div128: [13, rcc_hclk = sys_ck / 128]
+        Div256: [14, rcc_hclk = sys_ck / 256]
+        Div512: [15, rcc_hclk = sys_ck / 512]
+    PPRE*:
+      _replace_enum:
+        Div1: [-1, rcc_pclk = rcc_hclk]
+        Div2: [4, rcc_pclk = rcc_hclk / 2]
+        Div4: [5, rcc_pclk = rcc_hclk / 4]
+        Div8: [6, rcc_pclk = rcc_hclk / 8]
+        Div16: [7, rcc_pclk = rcc_hclk / 16]
+    AHB1DIS,AHB2DIS,AHB4DIS,APB1DIS,APB2DIS,APB3DIS:
+      _replace_enum:
+        Enabled: [0, Clock enabled]
+        Disabled: [1, Clock disabled]
+  CIER:
+    LSIRDYIE,LSERDYIE,HSISRDYIE,HSIDIV3RDYIE,HSIKRDYIE,PSISRDYIE,PSIDIV3RDYIE,PSIKRDYIE,HSERDYIE:
+      _replace_enum:
+        Disabled: [0, Interrupt disabled]
+        Enabled: [1, Interrupt enabled]
+  CIFR:
+    LSIRDYF,LSERDYF,HSISRDYF,HSIDIV3RDYF,HSIKRDYF,PSISRDYF,PSIDIV3RDYF,PSIKRDYF,HSERDYF:
+      _replace_enum:
+        NotInterrupted: [0, No clock ready interrupt]
+        Interrupted: [1, Clock ready interrupt]
+    HSECSSF,LSECSSF:
+      _replace_enum:
+        NotInterrupted: [0, No clock security interrupt caused by clock failure]
+        Interrupted: [1, Clock security interrupt caused by clock failure]
+  CICR:
+    LSIRDYC,LSERDYC,HSISRDYC,HSIDIV3RDYC,HSIKRDYC,PSISRDYC,PSIDIV3RDYC,PSIKRDYC,HSERDYC,HSECSSC,LSECSSC:
+      _replace_enum:
+        Clear: [1, Clear interrupt flag]
+  AHB1RSTR:
+    LPDMA1RST,LPDMA2RST,CRCRST,CORDICRST,RAMCFGRST,ETH1RST:
+      _replace_enum:
+        Reset: [1, Reset the selected module]
+  AHB2RSTR:
+    _modify:
+      ADCRST:
+        name: ADC12RST
+    GPIOARST,GPIOBRST,GPIOCRST,GPIODRST,GPIOERST,GPIOFRST,GPIOGRST,GPIOHRST,ADC12RST,DAC1RST,AESRST,HASHRST,RNGRST,PKARST,SAESRST,CCBRST,ADC3RST:
+      _replace_enum:
+        Reset: [1, Reset the selected module]
+  # AHB4RSTR: # only 59x/5A3
+  #   XSPI1RST:
+  #     _replace_enum:
+  #       Reset: [1, Reset the selected module]
+  APB1LRSTR:
+    _modify:
+      OPAMPRST:  # only 53x/542
+        name: OPAMP1RST
+    TIM2RST,TIM3RST,TIM4RST,TIM5RST,TIM6RST,TIM7RST,TIM12RST,OPAMP1RST,SPI2RST,SPI3RST,USART2RST,USART3RST,UART4RST,UART5RST,I2C1RST,I2C2RST,I3C1RST,CRSRST,USART6RST,UART7RST:
+      _replace_enum:
+        Reset: [1, Reset the selected module]
+  APB1HRSTR:
+    COMPRST,FDCANRST:
+      _replace_enum:
+        Reset: [1, Reset the selected module]
+  APB2RSTR:
+    TIM1RST,SPI1RST,TIM8RST,USART1RST,TIM15RST,TIM16RST,TIM17RST,USBRST:
+      _replace_enum:
+        Reset: [1, Reset the selected module]
+  APB3RSTR:
+    SBSRST,LPUART1RST,LPTIM1RST:
+      _replace_enum:
+        Reset: [1, Reset the selected module]
+  AHB1ENR:
+    _modify:
+      FLITFEN:
+        name: FLASHEN
+    LPDMA1EN,LPDMA2EN,FLASHEN,CRCEN,CORDICEN,RAMCFGEN,ETH1CKEN,ETH1EN,ETH1TXEN,ETH1RXEN,SRAM2EN,SRAM1EN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  AHB2ENR:
+    _modify:
+      ADCEN:
+        name: ADC12EN
+    GPIOAEN,GPIOBEN,GPIOCEN,GPIODEN,GPIOEEN,GPIOFEN,GPIOGEN,GPIOHEN,ADC12EN,DAC1EN,AESEN,HASHEN,RNGEN,PKAEN,SAESEN,CCBEN,ADC3EN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  # AHB4ENR: # only 59x/5A3
+  #   XSPI1EN:
+  #     _replace_enum:
+  #       Disabled: [0, The selected clock is disabled]
+  #       Enabled: [1, The selected clock is enabled]
+  APB1LENR:
+    _modify:
+      OPAMPEN:  # only 53x/542
+        name: OPAMP1EN
+    TIM2EN,TIM3EN,TIM4EN,TIM5EN,TIM6EN,TIM7EN,TIM12EN,WWDGEN,OPAMP1EN,SPI2EN,SPI3EN,USART2EN,USART3EN,UART4EN,UART5EN,I2C1EN,I2C2EN,I3C1EN,CRSEN,USART6EN,UART7EN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  APB1HENR:
+    COMPEN,FDCANEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  APB2ENR:
+    _add:
+      TIM8EN:
+        description: TIM8 clock enable
+        bitOffset: 13
+        bitWidth: 1
+        access: read-write
+    TIM1EN,SPI1EN,TIM8EN,USART1EN,TIM15EN,TIM16EN,TIM17EN,USBEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  APB3ENR:
+    SBSEN,LPUART1EN,LPTIM1EN,RTCAPBEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  AHB1LPENR:
+    _modify:
+      FLITFLPEN:
+        name: FLASHLPEN
+    LPDMA1LPEN,LPDMA2LPEN,FLASHLPEN,CRCLPEN,CORDICLPEN,RAMCFGLPEN,ETH1CKLPEN,ETH1LPEN,ETH1TXLPEN,ETH1RXLPEN,ICACHELPEN,SRAM2LPEN,SRAM1LPEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled during Sleep mode]
+        Enabled: [1, The selected clock is enabled during Sleep mode]
+  AHB2LPENR:
+    _modify:
+      ADCLPEN:
+        name: ADC12LPEN
+    GPIOALPEN,GPIOBLPEN,GPIOCLPEN,GPIODLPEN,GPIOELPEN,GPIOFLPEN,GPIOGLPEN,GPIOHLPEN,ADC12LPEN,DAC1LPEN,AESLPEN,HASHLPEN,RNGLPEN,PKALPEN,SAESLPEN,CCBLPEN,ADC3LPEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  # AHB4LPENR: # only 59x/5A3
+  #   XSPI1LPEN:
+  #     _replace_enum:
+  #       Disabled: [0, The selected clock is disabled]
+  #       Enabled: [1, The selected clock is enabled]
+  APB1LLPENR:
+    _modify:
+      OPAMPLPEN:  # only 53x/542
+        name: OPAMP1LPEN
+    TIM2LPEN,TIM3LPEN,TIM4LPEN,TIM5LPEN,TIM6LPEN,TIM7LPEN,TIM12LPEN,WWDGLPEN,OPAMP1LPEN,SPI2LPEN,SPI3LPEN,USART2LPEN,USART3LPEN,UART4LPEN,UART5LPEN,I2C1LPEN,I2C2LPEN,I3C1LPEN,CRSLPEN,USART6LPEN,UART7LPEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  APB1HLPENR:
+    COMPLPEN,FDCANLPEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  APB2LPENR:
+    TIM1LPEN,SPI1LPEN,TIM8LPEN,USART1LPEN,TIM15LPEN,TIM16LPEN,TIM17LPEN,USBLPEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  APB3LPENR:
+    SBSLPEN,LPUART1LPEN,LPTIM1LPEN,RTCAPBLPEN:
+      _replace_enum:
+        Disabled: [0, The selected clock is disabled]
+        Enabled: [1, The selected clock is enabled]
+  CCIPR1:
+    USART1SEL,USART2SEL,USART3SEL,UART4SEL,UART5SEL,USART6SEL,UART7SEL:
+      _replace_enum:
+        Pclk: [0, rcc_pclk selected as kernel clock]
+        PsiK: [1, psik_ck selected as kernel clock]
+        HsiK: [2, hsik_ck selected as kernel clock]
+        Lse: [3, lse_ck selected as kernel clock]
+    LPUART1SEL:
+      _replace_enum:
+        Pclk: [0, rcc_pclk selected as kernel clock]
+        HsiK: [1, hsik_ck selected as kernel clock]
+        Lse: [2, lse_ck selected as kernel clock]
+        Lsi: [3, lsi_ck selected as kernel clock]
+    SPI1SEL,SPI2SEL,SPI3SEL:
+      _replace_enum:
+        Pclk: [0, rcc_pclk selected as kernel clock]
+        PsiK: [1, psik_ck selected as kernel clock]
+        HsiK: [2, hsik_ck selected as kernel clock]
+        AudioClk: [3, AUDIOCLK selected as kernel clock]
+    FDCANSEL:
+      _replace_enum:
+        Pclk: [0, rcc_pclk selected as kernel clock]
+        Psis: [1, psis_ck selected as kernel clock]
+        PsiK: [2, psik_ck selected as kernel clock]
+        Hse: [3, hse_ck selected as kernel clock]
+  CCIPR2:
+    I2C1SEL,I2C2SEL,I3C1SEL:
+      _replace_enum:
+        Pclk: [0, rcc_pclk selected as kernel clock]
+        PsiK: [1, psik_ck selected as kernel clock]
+        HsiK: [2, hsik_ck selected as kernel clock]
+        Disabled: [3, kernel clock disabled]
+    ADCDACSEL:
+      _replace_enum:
+        Hclk: [0, rcc_hclk selected as kernel clock]
+        Psis: [1, psis_ck selected as kernel clock]
+        PsiK: [2, psik_ck selected as kernel clock]
+        HsiK: [3, hsik_ck selected as kernel clock]
+    ADCDACPRE:
+      _replace_enum:
+        Div1: [0, ADC and DAC kernel clock are not divided]
+        Div2: [1, ADC and DAC kernel clock divided by 2]
+        Div4: [2, ADC and DAC kernel clock divided by 4]
+        Div8: [3, ADC and DAC kernel clock divided by 8]
+        Div16: [4, ADC and DAC kernel clock divided by 16]
+        Div32: [5, ADC and DAC kernel clock divided by 32]
+        Div64: [6, ADC and DAC kernel clock divided by 64]
+        Div128: [7, ADC and DAC kernel clock divided by 128]
+    DACSEL:
+      _replace_enum:
+        Lse: [0, lse_ck selected as sample and hold clock]
+        Lsi: [1, lsi_ck selected as sample and hold clock]
+    LPTIM1SEL:
+      _replace_enum:
+        Pclk: [0, rcc_pclk selected as kernel clock]
+        HsiK: [1, hsik_ck selected as kernel clock]
+        Lse: [2, lse_ck selected as kernel clock]
+        Lsi: [3, lsi_ck selected as kernel clock]
+    CK48SEL:
+      _replace_enum:
+        Disabled: [0, kernel clock disabled]
+        PsiDiv3: [1, psi_div_3_ck selected as kernel clock]
+        HsiDiv3: [2, hsi_div_3_ck selected as kernel clock]
+        Hse: [3, hse_ck selected as kernel clock]
+    SYSTICKSEL:
+      _replace_enum:
+        HclkDiv8: [0, rcc_hclk/8 selected as clock source]
+        Lsi: [1, lsi_ker_ck selected as clock source]
+        Lse: [2, lse_ck selected as kernel clock]
+        Disabled: [3, kernel clock disabled]
+  # CCIPR3: # only 59x/5A3
+  #   XSPI1SEL:
+  #     _replace_enum:
+  #       Pclk: [0, rcc_hclk4 selected as kernel clock]
+  #       PsiK: [1, psik_ck selected as kernel clock]
+  #       HsiK: [2, hsik_ck selected as kernel clock]
+  #       Disabled: [3, kernel clock disabled]
+  #   ETH1REFCLKSEL:
+  #     _replace_enum:
+  #       Eth1RmiiRefClk: [0, ETH1_RMII_REF_CLK]
+  #       EthClkFb: [1, eth_clk_fb]
+  #   ETH1PTPCLKSEL:
+  #     _replace_enum:
+  #       Disabled: [0, kernel clock disabled]
+  #       Hclk: [1, rcc_hclk1 selected as kernel clock]
+  #       Psis: [2, psis_ck selected as kernel clock]
+  #       PsiK: [3, psik_ck selected as kernel clock]
+  #   ETH1CLKSEL:
+  #     _replace_enum:
+  #       Disabled: [0, kernel clock disabled]
+  #       Psis: [1, psis_ck selected as kernel clock]
+  #       PsiK: [2, psik_ck selected as kernel clock]
+  #       Hse: [3, hse_ck selected as kernel clock]
+  #   ETH1CLKDIV:
+  #     _replace_enum:
+  #       Div1: [0, divided by 1]
+  #       Div2: [1, divided by 2]
+  #       Div4: [2, divided by 4]
+  #   ETH1PTPDIV:
+  #     _replace_enum:
+  #       Div1: [0, divided by 1]
+  #       Div2: [1, divided by 2]
+  #       Div3: [2, divided by 3]
+  #       Div4: [3, divided by 4]
+  #       Div5: [4, divided by 5]
+  #       Div6: [5, divided by 6]
+  #       Div7: [6, divided by 7]
+  #       Div8: [7, divided by 8]
+  #       Div9: [8, divided by 9]
+  #       Div10: [9, divided by 10]
+  #       Div11: [10, divided by 11]
+  #       Div12: [11, divided by 12]
+  #       Div13: [12, divided by 13]
+  #       Div14: [13, divided by 14]
+  #       Div15: [14, divided by 15]
+  #       Div16: [15, divided by 16]
+  RTCCR:
+    LSEON,LSION:
+      _replace_enum:
+        Off: [0, Clock Off]
+        On: [1, Clock On]
+    LSERDY,LSIRDY:
+      _replace_enum:
+        NotReady: [0, Clock not ready]
+        Ready: [1, Clock ready]
+    LSEBYP:
+      _replace_enum:
+        NotBypassed: [0, Crystal oscillator not bypassed]
+        Bypassed: [1, Crystal oscillator bypassed with external clock]
+    LSEDRV:
+      _replace_enum:
+        Low: [0, Lowest drive]
+        MediumLow: [1, Medium-low drive]
+        MediumHigh: [2, Medium-high drive]
+        High: [3, Highest drive]
+    LSECSSON:
+      _replace_enum:
+        Off: [0, CSS on 32khz oscillator off]
+        On: [1, "CSS on 32khz oscillator on"]
+    LSECSSD:
+      _replace_enum:
+        NoFailure: [0, No failure detected on 32 kHz oscillator]
+        Failure: [1, Failure detected on 32 kHz oscillator]
+    LSEEXT:
+      _replace_enum:
+        Analog: [0, Oscillator bypassed in analog mode]
+        Digital: [1, Oscillator bypassed in digital mode]
+    RTCSEL:
+      _replace_enum:
+        Disabled: [0, No clock]
+        Lse: [1, LSE selected as RTC clock]
+        Lsi: [2, LSI selected as RTC clock]
+        HseDivRtcPre: [3, HSE divided by RTCPRE value selected as RTC clock]
+    RTCEN,LSCOEN:
+      _replace_enum:
+        Disabled: [0, clock disabled]
+        Enabled: [1, clock enabled]
+    RTCDRST:
+      _replace_enum:
+        NoReset: [0, reset not activated]
+        Reset: [1, resets the entire VSW domain]
+    LSCOSEL:
+      _replace_enum:
+        Lsi: [0, LSI clock selected]
+        Lse: [1, LSE clock selected]
+  RSR:
+    RMVF:
+      _replace_enum:
+        Reset: [1, Reset the value of the reset flags]
+    PINRSTF,BORRSTF,SFTRSTF,IWDGRSTF,WWDGRSTF,LPWRRSTF:
+      _replace_enum:
+        NoReset: [0, No reset occurred]
+        Reset: [1, A reset occurred]
+  PRIVCFGR:
+    PRIV:
+      _replace_enum:
+        Unprivileged: [0, Read and write to RCC functions can be done by privileged or unprivileged access]
+        Privileged: [1, Read and write to RCC functions can be done by privileged access only]
