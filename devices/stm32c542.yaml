@@ -5,6 +5,8 @@ _modify:
     description: General-purpose I/Os
   RCC:
     description: Reset and clock control
+  FLASH:
+    description: Flash memory management
 
 # _add:
   # GPIOF: # only 59x/5A3
@@ -608,3 +610,13 @@ RCC:
       _replace_enum:
         Unprivileged: [0, Read and write to RCC functions can be done by privileged or unprivileged access]
         Privileged: [1, Read and write to RCC functions can be done by privileged access only]
+
+FLASH:
+  _strip: #register names
+    - "FLASH_"
+  ACR:
+    _clear: 
+      - LATENCY
+    LATENCY: [0, 15]
+    WRHIGHFREQ: [1,2]
+    
